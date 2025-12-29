@@ -1,0 +1,5 @@
+# GitHub Copilot Auto Code Review Configuration
+# This file disables automatic code reviews for this repository
+
+# Disable auto code reviews
+enabled: false
