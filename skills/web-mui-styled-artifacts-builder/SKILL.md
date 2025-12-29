@@ -1,12 +1,12 @@
 ---
 name: web-mui-styled-artifacts-builder
-description: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Material UI). Use for complex artifacts requiring state management, routing, or Material UI components - not for simple single-file HTML/JSX artifacts.
+description: Suite of tools for creating elaborate, multi-component Claude HTML artifacts using modern frontend web technologies (React, Material UI). Use for complex artifacts requiring state management, routing, or Material UI components - not for simple single-file HTML/JSX artifacts.
 license: Complete terms in LICENSE.txt
 ---
 
 # Web MUI Styled Artifacts Builder
 
-To build powerful frontend claude.ai artifacts with Material UI, follow these steps:
+To build powerful frontend Claude artifacts with Material UI, follow these steps:
 1. Initialize the frontend repo using `scripts/init-artifact.sh`
 2. Develop your artifact by editing the generated code
 3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`
@@ -41,6 +41,17 @@ This creates a fully configured project with:
 ### Step 2: Develop Your Artifact
 
 To build the artifact, edit the generated files. See **Common Development Tasks** below for guidance.
+
+## Common Development Tasks
+
+- **Run the dev server**: Use the standard Vite dev command (for example, `pnpm dev`) to iterate on your artifact with hot reload.
+- **Edit entry points**: Modify the main React entry file (commonly `src/main.tsx`) and the root component to define the overall layout and routing of your artifact.
+- **Create components**: Place reusable UI pieces under `src/components/`, using MUI components (`@mui/material`, `@mui/icons-material`) and Emotion for styling.
+- **Styling with Emotion + MUI**: Prefer MUI's `sx` prop and Emotion's styled APIs instead of inline styles or global CSS. Keep styles colocated with components when possible.
+- **Theming**: Configure a custom MUI theme (e.g., in `src/theme.ts`) and wrap your app in `ThemeProvider` to maintain a consistent visual style and avoid "AI slop" patterns.
+- **Routing (if needed)**: If your artifact spans multiple views, add a router (such as React Router) and keep route components small and focused.
+- **TypeScript hygiene**: Keep TypeScript types up to date and avoid using `any` except as a last resort to maintain robustness.
+- **Prepare for bundling**: Ensure your app mounts into the root element referenced by `index.html` and that all assets are imported via the module graph so the bundler can inline them.
 
 ### Step 3: Bundle to Single HTML File
 

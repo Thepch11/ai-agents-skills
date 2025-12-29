@@ -1,4 +1,6 @@
 #!/bin/bash
+# Ensure this script is executable before running:
+#   chmod +x skills/web-mui-styled-artifacts-builder/scripts/init-artifact.sh
 
 # Exit on error
 set -e
@@ -25,20 +27,39 @@ fi
 
 # Detect OS and set sed syntax
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  SED_INPLACE="sed -i ''"
+  sed_inplace() {
+    sed -i '' "$@"
+  }
 else
-  SED_INPLACE="sed -i"
+  sed_inplace() {
+    sed -i "$@"
+  }
 fi
 
 # Check if pnpm is installed
 if ! command -v pnpm &> /dev/null; then
-  echo "📦 pnpm not found. Installing pnpm..."
-  npm install -g pnpm
+  echo "📦 pnpm not found."
+  NPM_PREFIX=$(npm config get prefix 2>/dev/null || echo "")
+  if [ -n "$NPM_PREFIX" ] && [ -d "$NPM_PREFIX" ] && [ -w "$NPM_PREFIX" ]; then
+    echo "🔧 Attempting to install pnpm globally using npm (prefix: $NPM_PREFIX)..."
+    if ! npm install -g pnpm; then
+      echo "❌ Failed to install pnpm globally with npm."
+      echo "   You may not have permission to install global npm packages."
+      echo "   Please install pnpm manually by following the instructions at:"
+      echo "   https://pnpm.io/installation"
+      exit 1
+    fi
+  else
+    echo "❌ You do not appear to have permission to install global npm packages (prefix: ${NPM_PREFIX:-unknown})."
+    echo "   Please install pnpm manually before running this script again."
+    echo "   See installation instructions at: https://pnpm.io/installation"
+    exit 1
+  fi
 fi
 
 # Check if project name is provided
 if [ -z "$1" ]; then
-  echo "❌ Usage: ./init-artifact.sh <project-name>"
+  echo "❌ Usage: $0 <project-name>"
   exit 1
 fi
 
@@ -53,8 +74,8 @@ pnpm create vite "$PROJECT_NAME" --template react-ts
 cd "$PROJECT_NAME"
 
 echo "🧹 Cleaning up Vite template..."
-$SED_INPLACE '/<link rel="icon".*vite\.svg/d' index.html
-$SED_INPLACE 's/<title>.*<\/title>/<title>'"$PROJECT_NAME"'<\/title>/' index.html
+sed_inplace '/<link rel="icon".*vite\.svg/d' index.html
+sed_inplace 's/<title>.*<\/title>/<title>'"$PROJECT_NAME"'<\/title>/' index.html
 
 echo "📦 Installing base dependencies..."
 pnpm install
@@ -89,7 +110,7 @@ const content = fs.readFileSync(path, 'utf8');
 // Remove comments manually
 const lines = content.split('\n').filter(line => !line.trim().startsWith('//'));
 const jsonContent = lines.join('\n');
-const config = JSON.parse(jsonContent.replace(/\/\*[\s\S]*?\*\//g, '').replace(/,(\s*[}\]])/g, '\$1'));
+const config = JSON.parse(jsonContent.replace(/\/\*[\s\S]*?\*\//g, '').replace(/,(\s*[}\]])/g, '$1'));
 config.compilerOptions = config.compilerOptions || {};
 config.compilerOptions.baseUrl = '.';
 config.compilerOptions.paths = { '@/*': ['./src/*'] };
@@ -100,8 +121,11 @@ fs.writeFileSync(path, JSON.stringify(config, null, 2));
 echo "⚙️  Updating Vite configuration..."
 cat > vite.config.ts << 'EOF'
 import path from "path";
+import { fileURLToPath } from "url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
