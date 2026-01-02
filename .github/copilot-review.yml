@@ -2,4 +2,4 @@
 # This file disables automatic code reviews for this repository
 
 # Disable auto code reviews
-enabled: true
+enabled: false
