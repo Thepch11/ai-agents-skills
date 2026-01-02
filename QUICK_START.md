@@ -19,7 +19,7 @@ my-skill/
 ### 1. Initialize
 
 ```bash
-cd /home/runner/work/copilot-skills/copilot-skills
+cd /path/to/copilot-skills
 python skills/skill-creator/scripts/init_skill.py my-first-skill --path skills
 ```
 
