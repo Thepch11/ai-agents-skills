@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This repository implements the **Agent Skills** standard - a system for extending AI agent capabilities through modular, self-contained instruction packages. The repository contains 16 production skills spanning creative, enterprise, and technical domains, plus comprehensive tooling for skill creation and validation.
+This repository implements the **Agent Skills** standard - a system for extending AI agent capabilities through modular, self-contained instruction packages. The repository contains 18 production skills spanning creative, enterprise, and technical domains, plus comprehensive tooling for skill creation and validation.
 
 **Key Finding:** The skills system uses a sophisticated three-level progressive disclosure model (metadata → body → resources) to manage context window efficiently while providing deep domain knowledge when needed.
 
