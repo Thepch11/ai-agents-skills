@@ -1,0 +1,87 @@
+---
+name: web-mui-styled-artifacts-builder
+description: Suite of tools for creating elaborate, multi-component Claude HTML artifacts using modern frontend web technologies (React, Material UI). Use for complex artifacts requiring state management, routing, or Material UI components - not for simple single-file HTML/JSX artifacts.
+license: Complete terms in LICENSE.txt
+---
+
+# Web MUI Styled Artifacts Builder
+
+To build powerful frontend Claude artifacts with Material UI, follow these steps:
+1. Initialize the frontend repo using `scripts/init-artifact.sh`
+2. Develop your artifact by editing the generated code
+3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`
+4. Display artifact to user
+5. (Optional) Test the artifact
+
+**Stack**: React 18 + TypeScript + Vite + Parcel (bundling) + Material UI (MUI) + Emotion (styling)
+
+## Design & Style Guidelines
+
+VERY IMPORTANT: To avoid what is often referred to as "AI slop", avoid using excessive centered layouts, purple gradients, uniform rounded corners, and Inter font.
+
+## Quick Start
+
+### Step 1: Initialize Project
+
+Run the initialization script to create a new React project:
+```bash
+bash scripts/init-artifact.sh <project-name>
+cd <project-name>
+```
+
+This creates a fully configured project with:
+- ✅ React + TypeScript (via Vite)
+- ✅ Material UI (MUI) complete component library
+- ✅ Emotion for CSS-in-JS styling
+- ✅ MUI Icons (@mui/icons-material)
+- ✅ Path aliases (`@/`) configured
+- ✅ Parcel configured for bundling (via .parcelrc)
+- ✅ Node 18+ compatibility (auto-detects and pins Vite version)
+
+### Step 2: Develop Your Artifact
+
+To build the artifact, edit the generated files. See **Common Development Tasks** below for guidance.
+
+## Common Development Tasks
+
+- **Run the dev server**: Use the standard Vite dev command (for example, `pnpm dev`) to iterate on your artifact with hot reload.
+- **Edit entry points**: Modify the main React entry file (commonly `src/main.tsx`) and the root component to define the overall layout and routing of your artifact.
+- **Create components**: Place reusable UI pieces under `src/components/`, using MUI components (`@mui/material`, `@mui/icons-material`) and Emotion for styling.
+- **Styling with Emotion + MUI**: Prefer MUI's `sx` prop and Emotion's styled APIs instead of inline styles or global CSS. Keep styles colocated with components when possible.
+- **Theming**: Configure a custom MUI theme (e.g., in `src/theme.ts`) and wrap your app in `ThemeProvider` to maintain a consistent visual style and avoid "AI slop" patterns.
+- **Routing (if needed)**: If your artifact spans multiple views, add a router (such as React Router) and keep route components small and focused.
+- **TypeScript hygiene**: Keep TypeScript types up to date and avoid using `any` except as a last resort to maintain robustness.
+- **Prepare for bundling**: Ensure your app mounts into the root element referenced by `index.html` and that all assets are imported via the module graph so the bundler can inline them.
+
+### Step 3: Bundle to Single HTML File
+
+To bundle the React app into a single HTML artifact:
+```bash
+bash scripts/bundle-artifact.sh
+```
+
+This creates `bundle.html` - a self-contained artifact with all JavaScript, CSS, and dependencies inlined. This file can be directly shared in Claude conversations as an artifact.
+
+**Requirements**: Your project must have an `index.html` in the root directory.
+
+**What the script does**:
+- Installs bundling dependencies (parcel, @parcel/config-default, parcel-resolver-tspaths, html-inline)
+- Creates `.parcelrc` config with path alias support
+- Builds with Parcel (no source maps)
+- Inlines all assets into single HTML using html-inline
+
+### Step 4: Share Artifact with User
+
+Finally, share the bundled HTML file in conversation with the user so they can view it as an artifact.
+
+### Step 5: Testing/Visualizing the Artifact (Optional)
+
+Note: This is a completely optional step. Only perform if necessary or requested.
+
+To test/visualize the artifact, use available tools (including other Skills or built-in tools like Playwright or Puppeteer). In general, avoid testing the artifact upfront as it adds latency between the request and when the finished artifact can be seen. Test later, after presenting the artifact, if requested or if issues arise.
+
+## Reference
+
+- **Material UI components**: https://mui.com/material-ui/all-components/
+- **MUI System**: https://mui.com/system/getting-started/
+- **MUI Icons**: https://mui.com/material-ui/material-icons/
