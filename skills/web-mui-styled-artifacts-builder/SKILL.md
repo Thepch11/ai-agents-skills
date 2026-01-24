@@ -47,7 +47,7 @@ To build the artifact, edit the generated files. See **Common Development Tasks*
 - **Run the dev server**: Use the standard Vite dev command (for example, `pnpm dev`) to iterate on your artifact with hot reload.
 - **Edit entry points**: Modify the main React entry file (commonly `src/main.tsx`) and the root component to define the overall layout and routing of your artifact.
 - **Create components**: Place reusable UI pieces under `src/components/`, using MUI components (`@mui/material`, `@mui/icons-material`) and Emotion for styling.
-- **Styling with Emotion + MUI**: Prefer MUI's `sx` prop and Emotion's styled APIs instead of inline styles or global CSS. Keep styles colocated with components when possible.
+- **Styling with Emotion + MUI**: Prefer MUI's `sx` prop and Emotion's styled APIs instead of inline styles or global CSS. Keep styles co-located with components when possible.
 - **Theming**: Configure a custom MUI theme (e.g., in `src/theme.ts`) and wrap your app in `ThemeProvider` to maintain a consistent visual style and avoid "AI slop" patterns.
 - **Routing (if needed)**: If your artifact spans multiple views, add a router (such as React Router) and keep route components small and focused.
 - **TypeScript hygiene**: Keep TypeScript types up to date and avoid using `any` except as a last resort to maintain robustness.
