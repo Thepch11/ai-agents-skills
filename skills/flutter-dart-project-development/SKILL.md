@@ -144,6 +144,156 @@ performance by reducing unnecessary rebuilds
    - Move state to ChangeNotifier Provider
    - Replace setState calls with notifyListeners
 
+## Code Explanation Guidelines
+
+When explaining Flutter/Dart code, follow these principles to provide clear, educational insights:
+
+### Explain Provider Patterns First
+
+**State Flow Analysis:**
+```
+When explaining code using Providers, always:
+1. Identify which Provider(s) are being accessed
+2. Explain the state flow: Provider → Consumer/Selector → UI
+3. Clarify whether context.read, context.watch, or Consumer is used and why
+4. Highlight what triggers rebuilds vs. what just reads state
+```
+
+**Example Explanation Format:**
+- "This widget uses `context.watch<CartProvider>()` which means it will rebuild whenever any property in CartProvider changes"
+- "The `context.read<AuthProvider>()` in the onPressed callback won't trigger rebuilds - it just calls the login method"
+- "This Selector watches only the `itemCount` property, so the widget rebuilds only when that specific value changes, not on every cart update"
+
+### Widget Lifecycle Context
+
+**Explain Stateful vs. Stateless:**
+```
+When explaining widgets:
+- For StatelessWidget: Emphasize that it's immutable and rebuilds are controlled by parent or Provider
+- For StatefulWidget: Explain initState, dispose, and setState usage
+- Always clarify why the widget type was chosen (ephemeral state vs. shared state)
+```
+
+**Build Method Analysis:**
+- Point out expensive operations in build() that might cause performance issues
+- Highlight const constructors and their performance benefits
+- Explain widget tree composition and how children are passed
+
+### Async Operations in Flutter
+
+**Future and Stream Patterns:**
+```
+When explaining asynchronous code:
+1. Identify FutureBuilder or StreamBuilder usage
+2. Explain the three states: waiting, data, error
+3. Show how Provider methods handle async (returning Future/Stream)
+4. Highlight proper error handling patterns
+```
+
+**Example:**
+```dart
+// Explain this pattern clearly
+FutureBuilder<User>(
+  future: context.read<UserProvider>().fetchUser(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator();
+    }
+    if (snapshot.hasError) {
+      return ErrorWidget(snapshot.error);
+    }
+    return UserProfile(user: snapshot.data);
+  },
+)
+```
+
+**Explanation Points:**
+- "FutureBuilder handles three states: loading (waiting), success (hasData), and error (hasError)"
+- "Using context.read here is correct because we're triggering an action, not watching for changes"
+- "The builder is called multiple times as the Future progresses through its states"
+
+### Key Flutter/Dart Concepts
+
+**1. Immutability and final:**
+```
+Always explain:
+- Why fields are marked final in widgets
+- The difference between final and const
+- How immutability relates to Flutter's rebuild mechanism
+```
+
+**2. Named Parameters and Required:**
+```
+Highlight:
+- When parameters use 'required' keyword and why
+- Optional named parameters with defaults
+- The super.key pattern in constructors
+```
+
+**3. Extension Methods:**
+```dart
+// Explain these common patterns
+context.watch<T>()  // Extension on BuildContext
+MediaQuery.of(context).size  // Static method pattern
+Theme.of(context)  // InheritedWidget access pattern
+```
+
+### Performance Implications
+
+**Always Mention:**
+- Widget rebuild frequency and optimization opportunities
+- Const constructors for static widgets
+- When to extract widgets into separate classes
+- Memory implications of Provider disposal
+
+**Example Explanation:**
+"This Consumer rebuilds only the Text widget when the counter changes, while the expensive Image widget is passed as `child` and doesn't rebuild. This is a performance optimization."
+
+### Testing Context
+
+**When explaining test code:**
+```
+1. Show how Providers are mocked or provided in tests
+2. Explain pumpWidget vs. pump vs. pumpAndSettle
+3. Clarify finder patterns (find.text, find.byType, find.byKey)
+4. Highlight async expectations with expect + matcher
+```
+
+### Code Smell Recognition
+
+**Point out anti-patterns:**
+- "⚠️ This uses context.watch inside a callback, which will cause unnecessary rebuilds. Should use context.read instead."
+- "⚠️ This Provider is managing ephemeral state like TextEditingController - consider moving to StatefulWidget."
+- "⚠️ This widget has business logic in the build method - should be extracted to the Provider."
+- "⚠️ Missing dispose() for this Provider's resources (streams, controllers, listeners)."
+
+### Incremental Explanation Strategy
+
+**For complex code:**
+1. **High-level overview** - "This screen manages user profile updates using ProfileProvider"
+2. **Widget tree structure** - "The main Scaffold contains a Form with TextFields and a submit button"
+3. **State management flow** - "When Submit is pressed, context.read<ProfileProvider>().updateProfile() is called"
+4. **Data flow** - "The Provider validates input, calls the API, updates state, and notifies listeners"
+5. **UI response** - "Consumer<ProfileProvider> rebuilds to show success message or errors"
+
+### Domain-Specific Vocabulary
+
+**Use correct Flutter terminology:**
+- "Hot reload" vs. "hot restart"
+- "Widget tree" vs. "element tree" vs. "render tree"
+- "BuildContext" is the widget's location in the tree
+- "Scaffold" provides Material Design visual layout structure
+- "Navigator" manages route stack for navigation
+- "MediaQuery" provides device/display information
+- "Theme" provides app-wide styling configuration
+
+### Interactive Explanation Prompts
+
+**Encourage deeper understanding:**
+- "Would you like me to explain why Provider was chosen over setState here?"
+- "I can show you how to optimize this widget's rebuilds using Selector - interested?"
+- "This pattern might be unfamiliar - should I break down how ChangeNotifier works?"
+
 ## Integration with Modern Flutter Patterns
 
 ### Clean Architecture
