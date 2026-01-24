@@ -1,12 +1,12 @@
 ---
 name: web-mui-styled-artifacts-builder
-description: Suite of tools for creating elaborate, multi-component Claude HTML artifacts using modern frontend web technologies (React, Material UI). Use for complex artifacts requiring state management, routing, or Material UI components - not for simple single-file HTML/JSX artifacts.
+description: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Material UI). Use for complex artifacts requiring state management, routing, or Material UI components - not for simple single-file HTML/JSX artifacts.
 license: Complete terms in LICENSE.txt
 ---
 
 # Web MUI Styled Artifacts Builder
 
-To build powerful frontend Claude artifacts with Material UI, follow these steps:
+To build powerful frontend claude.ai HTML artifacts with Material UI, follow these steps:
 1. Initialize the frontend repo using `scripts/init-artifact.sh`
 2. Develop your artifact by editing the generated code
 3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`
