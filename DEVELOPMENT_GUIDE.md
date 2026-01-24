@@ -25,6 +25,8 @@ copilot-skills/
 │   ├── slack-gif-creator/    # Creative: GIF generation
 │   ├── theme-factory/        # Creative: Theme generation
 │   ├── web-artifacts-builder/# Development: Web artifact creation
+│   ├── web-mui-styled-artifacts-builder/  # Development: Web artifacts with MUI styling
+│   ├── flutter-dart-project-development/  # Development: Flutter/Dart project workflows
 │   ├── webapp-testing/       # Development: Playwright-based testing
 │   └── xlsx/                 # Document: Excel manipulation
 ├── spec/                     # Agent Skills specification
